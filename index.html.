@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Video Studio</title>
+<style>
+body{font-family:Arial,sans-serif;background:#10131c;color:#fff;margin:0;padding:20px}
+main{max-width:600px;margin:auto}
+h1{color:#a9b8ff}
+p{color:#c5c9d8}
+label{display:block;margin-top:18px;margin-bottom:8px;font-weight:bold}
+input,textarea,select,button{box-sizing:border-box;width:100%;padding:12px;border-radius:9px;border:1px solid #44495b;background:#202534;color:white;font-size:16px}
+textarea{min-height:100px}
+button{margin-top:20px;background:#6678ff;border:0;font-weight:bold}
+#preview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+#preview img{width:100%;border-radius:8px}
+</style>
+</head>
+<body>
+<main>
+<h1>AI Video Studio</h1>
+<p>Studio video AI peribadi — prototaip percuma.</p>
+
+<label>Foto rujukan watak dan lokasi</label>
+<input id="photos" type="file" accept="image/*" multiple>
+<div id="preview"></div>
+<p id="count">Belum ada foto dipilih.</p>
+
+<label>Arahan adegan</label>
+<textarea id="prompt" placeholder="Contoh: Yadi duduk di meja makan bersama Embun..."></textarea>
+
+<label>Dialog Bahasa Indonesia</label>
+<textarea id="dialogue" placeholder="Yadi berkata: Jangan sedih, Nak..."></textarea>
+
+<label>Durasi video</label>
+<select id="duration">
+<option value="10">10 saat</option>
+</select>
+
+<label>Format video</label>
+<select id="format">
+<option value="9:16">Menegak 9:16</option>
+</select>
+
+<button onclick="prepare()">Siapkan arahan video</button>
+<p id="status">Model penjana video belum disambungkan.</p>
+</main>
+
+<script>
+const photos=document.getElementById('photos');
+photos.addEventListener('change',()=>{
+const files=[...photos.files];
+document.getElementById('count').textContent=
+files.length+' foto dipilih.';
+const preview=document.getElementById('preview');
+preview.innerHTML='';
+files.forEach(file=>{
+const img=document.createElement('img');
+img.src=URL.createObjectURL(file);
+preview.appendChild(img);
+});
+});
+function prepare(){
+const prompt=document.getElementById('prompt').value.trim();
+const dialogue=document.getElementById('dialogue').value.trim();
+if(!photos.files.length){
+alert('Pilih sekurang-kurangnya satu foto dahulu.');
+return;
+}
+if(!prompt){
+alert('Masukkan arahan adegan dahulu.');
+return;
+}
+const text='Buat video realistik menegak 9:16 selama 10 saat. '+
+'Arahan adegan: '+prompt+
+' Dialog Bahasa Indonesia: '+dialogue+
+' Gunakan foto rujukan untuk mengekalkan watak dan lokasi.';
+document.getElementById('status').textContent=
+'Arahan telah disediakan. Enjin AI belum disambungkan, jadi video belum dijana.';
+const blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download='arahan-video.txt';
+a.click();
+URL.revokeObjectURL(a.href);
+}
+</script>
+</body>
+</html>
