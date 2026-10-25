@@ -113,25 +113,7 @@ async function prepare() {
 const prompt=document.getElementById('prompt').value.trim();
 const dialogue=document.getElementById('dialogue').value.trim();
 if(!photos.files.length){
-alert('Pilih sekurang-kurangnya satu foto dahulu.');
-return;
-}
-if(!prompt){
-alert('Masukkan arahan adegan dahulu.');
-return;
-}
-const text='Buat video realistik menegak 9:16 selama 10 saat. '+
-'Arahan adegan: '+prompt+
-' Dialog Bahasa Indonesia: '+dialogue+
-' Gunakan foto rujukan untuk mengekalkan watak dan lokasi.';
-document.getElementById('status').textContent=
-'Arahan telah disediakan. Enjin AI belum disambungkan, jadi video belum dijana.';
-const blob=new Blob([text],{type:'text/plain;charset=utf-8'});
-const a=document.createElement('a');
-a.href=URL.createObjectURL(blob);
-a.download='arahan-video.txt';
-a.click();
-URL.revokeObjectURL(a.href);
+
 }
 </script>
 </body>
