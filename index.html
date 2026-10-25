@@ -62,7 +62,54 @@ img.src=URL.createObjectURL(file);
 preview.appendChild(img);
 });
 });
-function prepare(){
+
+async function prepare() {
+  const prompt = document.getElementById('prompt').value.trim();
+  const dialogue = document.getElementById('dialogue').value.trim();
+  const status = document.getElementById('status');
+
+  if (!photos.files.length) {
+    alert('Pilih sekurang-kurangnya satu foto dahulu.');
+    return;
+  }
+
+  if (!prompt) {
+    alert('Masukkan arahan adegan dahulu.');
+    return;
+  }
+
+  status.textContent = 'Sedang menguji sambungan...';
+
+  try {
+    const response = await fetch(
+      'https://ai-video-backend-chefone21.chefone21.workers.dev/prepare',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          prompt: prompt,
+          dialogue: dialogue,
+          duration: document.getElementById('duration').value,
+          format: document.getElementById('format').value,
+          photoCount: photos.files.length
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Sambungan gagal.');
+    }
+
+    status.textContent = result.message;
+  } catch (error) {
+    status.textContent = 'Ralat sambungan: ' + error.message;
+  }
+}
+
 const prompt=document.getElementById('prompt').value.trim();
 const dialogue=document.getElementById('dialogue').value.trim();
 if(!photos.files.length){
